@@ -9,14 +9,17 @@
  * main - Implementation of a UNIX command line interpreter.
  * Return:  0 on success, 1 on failure.
  */
-int main(void)
+int main(int ac, char **av)
 {
 	char *prompt = "$ ";
-	char *lineptr; /* Adresse du buffer de saisie */
+	char *lineptr = NULL; /* Adresse du buffer de saisie */
 	size_t n = 0; /* Taille allouée en octets */
 	ssize_t nchars_read; /* Nombre de caractères lus */
 	pid_t pid;
 	int status; /* Statut de sortie */
+
+	(void)ac;
+	(void)av;
 
 	while (1) /* Boucle infinie pour lire et exécuter des commandes */
 	{
@@ -35,17 +38,19 @@ int main(void)
 		{
 			perror("fork");
 			free(lineptr);
-			exit(EXIT_FAILURE); /* Arrète le programme avec un status d'erreur */
+			exit(1); /* Arrète le programme avec un status d'erreur */
 		}
 		else if (pid == 0) /* Processus fils */
 		{
-			char *argv[] = {lineptr, NULL};
+			char *argv_exec[2]; /* tableau de pointeurs de char pour execve */
+			argv_exec[0] = lineptr;
+			argv_exec[1] = NULL;
 
-			if (execve(argv[0], argv, NULL) == -1) /* Exécute la commande */
+			if (execve(argv_exec[0], argv_exec, NULL) == -1) /* Exécute la commande */
 			{
 				perror("Error");
 				free(lineptr);
-				exit(EXIT_FAILURE); /* Arrète le programme avec un status d'erreur */
+				exit(1); /* Arrète le programme avec un status d'erreur */
 			}
 		}
 		else /* Processus père */
