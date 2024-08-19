@@ -12,7 +12,7 @@
 int main(void)
 {
 	char *prompt = "$ ";
-	char *lineptr; /* Adresse du buffer de saisie */
+	char *lineptr = NULL; /* Adresse du buffer de saisie */
 	size_t n = 0; /* Taille allouée en octets */
 	ssize_t nchars_read; /* Nombre de caractères lus */
 	pid_t pid;
