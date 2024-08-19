@@ -12,44 +12,44 @@
 int main(void)
 {
 	char *prompt = "$ ";
-	char *lineptr = NULL; /* Adresse du buffer de saisie */
-	size_t n = 0; /* Taille allouée en octets */
-	ssize_t nchars_read; /* Nombre de caractères lus */
+	char *lineptr = NULL;
+	size_t n = 0;
+	ssize_t nchars_read;
 	pid_t pid;
-	int status; /* Statut de sortie */
+	int status;
 
-	while (1) /* Boucle infinie pour lire et exécuter des commandes */
+	while (1)
 	{
-		printf("%s", prompt); /* Affiche l'invite de commande */
-		nchars_read = getline(&lineptr, &n, stdin); /* Lit une ligne de l'entrée standard */
-		if (nchars_read == -1) /* Fin de fichier (CTRL + D) */
+		printf("%s", prompt);
+		nchars_read = getline(&lineptr, &n, stdin);
+		if (nchars_read == -1)
 		{
 			printf("\n");
 			free(lineptr);
-			return (0);
+			return 0;
 		}
-		lineptr[strcspn(lineptr, "\n")] = 0; /* Supprime le saut de ligne de la saisie */
+		lineptr[strcspn(lineptr, "\n")] = 0;
 
-		pid = fork(); /* Crée un nouveau processus */
-		if (pid == -1) /* Échec de la création du processus */
+		pid = fork();
+		if (pid == -1)
 		{
 			perror("fork");
 			free(lineptr);
-			exit(EXIT_FAILURE); /* Arrète le programme avec un status d'erreur */
+			exit(1);
 		}
-		else if (pid == 0) /* Processus fils */
+		else if (pid == 0)
 		{
 			char *argv[] = {lineptr, NULL};
 
-			if (execve(argv[0], argv, NULL) == -1) /* Exécute la commande */
+			if (execve(argv[0], argv, NULL) == -1)
 			{
 				perror("Error");
 				free(lineptr);
-				exit(EXIT_FAILURE); /* Arrète le programme avec un status d'erreur */
+				exit(1);
 			}
 		}
-		else /* Processus père */
-			wait(&status); /* Attend la fin du processus fils */
+		else
+			wait(&status);
 	}
 
 	free(lineptr);
