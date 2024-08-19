@@ -1,0 +1,35 @@
+.TH man 3 "19 august 2024"  "Sumple shell man page"
+
+.SH NAME
+
+_simple_shell - Printing the prompt, reading and printing what the end user types out.
+
+.SH SYNOPSIS
+
+#include <sys/types.h>
+#include <sys/wait.h>
+
+
+.SH DESCRIPTION
+
+Shell is a UNIX term for the interactive user interface with an operating system. The shell is the layer of programming that understands
+and executes the commands a user enters. In some systems, the shell is called a command interpreter. A shell usually implies an interface
+with a command syntax
+
+.SH RETURN VALUE
+
+Always 0 for success, other number means failure.
+
+
+.SH EXAMPLES
+
+Basic usage of shell:
+
+[command] [options]
+$ rm -r
+delete a directory containing subdirectories
+
+.SH AUTHOR:
+
+Yanis MEFTOUH
+Zakaria AATTACHE
