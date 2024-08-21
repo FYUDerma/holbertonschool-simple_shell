@@ -71,3 +71,40 @@ char **tokenize(char *input)
     tokens[i] = NULL;
     return (tokens);
 }
+
+/**
+ * getPath - gets the path of a command
+ * @input: command to get path of
+ * Return: path of command
+*/
+
+char *getPath(char *input)
+{
+    char *result, *pathEnv, *pathEnvCopy, *token, fullPath[1024];
+
+    pathEnv = getenv("PATH");
+
+    if (pathEnv == NULL)
+        return (NULL);
+
+    pathEnvCopy = strdup(pathEnv);
+
+    token = strtok(pathEnvCopy, ":");
+
+    while (token)
+    {
+        sprintf(fullPath, "%s/%s", token, input);
+
+        if (acces(fullPath, F_OK | X_OK) == 0)
+        {
+            result = strdup(fullPath);
+            free(pathEnvCopy);
+            return (result);
+        }
+
+        token = strtok(NULL, ":");
+    }
+
+    free(pathEnvCopy);
+    return (NULL);
+}
