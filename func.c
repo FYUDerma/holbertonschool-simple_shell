@@ -8,7 +8,7 @@
 
 int _isspace(int c)
 {
-	if (c == ' ' || c == '\t' || c == '\r' || c == '\w' || c == '\f')
+	if (c == ' ' || c == '\t' || c == '\r' || c == '\v' || c == '\f')
 	{
 		return (1);
 	}
@@ -55,9 +55,10 @@ char **tokenize(char *input)
     int i = 0;
 
     if (!tokens)
+    {
         fprintf(stderr, "$: allocation error\n");
         exit(EXIT_FAILURE);
-
+    }
     token = strtok(input, " \t\r\n\a");
 
     while (token != NULL)
@@ -85,8 +86,9 @@ char *getPath(char *input)
     pathEnv = getenv("PATH");
 
     if (pathEnv == NULL)
+    {
         return (NULL);
-
+    }
     pathEnvCopy = strdup(pathEnv);
 
     token = strtok(pathEnvCopy, ":");
@@ -95,7 +97,7 @@ char *getPath(char *input)
     {
         sprintf(fullPath, "%s/%s", token, input);
 
-        if (acces(fullPath, F_OK | X_OK) == 0)
+        if (access(fullPath, F_OK | X_OK) == 0)
         {
             result = strdup(fullPath);
             free(pathEnvCopy);
@@ -123,18 +125,25 @@ int execute(char *input)
 
     args = tokenize(input);
     if (args == NULL)
+    {
         free(args);
         return (1);
-
+    }
 
     if (input[0] == '/' || input[0] == '.')
+    {
         path = strdup(input);
+    }
     else
+    {
         path = getPath(args[0]);
+    }
 
     if (path == NULL)
+    {
         free(args);
         return (-1);
+    }
 
     pid = fork();
 
