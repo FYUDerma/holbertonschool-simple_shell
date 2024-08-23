@@ -16,7 +16,7 @@ int main(void)
 
 	while (1) /* bouble infini*/
 	{
-		if (isatty(0)) /* si isatty est null*/
+		if (isatty(0)) /* Si cette condition est vraie, cela signifie que l'entrée standard est bien un terminal*/
 		{
 			printf("HBTN-Shell: "); /* affiche hbtn-shell:*/
 		}
