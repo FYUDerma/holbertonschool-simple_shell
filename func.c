@@ -64,9 +64,9 @@ char **tokenize(char *input)
     }
     token = strtok(input, " \t\r\n\a"); /* */
 
-    while (token != NULL) /* boucle avec condition tans que token n'est pas ou eal a null*/
+    while (token != NULL) /* boucle avec condition tans que token n'est pas ou egal a null*/
     {
-        tokens[i] = token; /* le string i a comme valeur token*/
+        tokens[i] = token; /* le string  de la ligne i a comme valeur token*/
         i++; /* incrementation de la variable */
 
         token = strtok(NULL, " \t\r\n\a"); /* */
