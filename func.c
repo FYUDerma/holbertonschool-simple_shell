@@ -8,7 +8,7 @@
 
 int _isspace(int c)
 {
-	if (c == ' ' || c == '\t' || c == '\r' || c == '\w' || c == '\f') /* si la variable c = charactere
+	if (c == ' ' || c == '\t' || c == '\r' || c == '\v' || c == '\f') /* si la variable c = charactere
 	d'espacement*/
 	{
 		return (1); /* retourne vrai*/
@@ -58,9 +58,10 @@ char **tokenize(char *input)
     int i = 0; /* declare une variable de type integere de nom i et valeur 0*/
 
     if (!tokens) /* si token n'est pas null*/
+    {
         fprintf(stderr, "$: allocation error\n"); /* affiche le prompt avec le message*/
         exit(EXIT_FAILURE); /* quitte le fichier*/
-
+    }
     token = strtok(input, " \t\r\n\a"); /* */
 
     while (token != NULL) /* boucle avec condition tans que token n'est pas ou eal a null*/
@@ -89,8 +90,9 @@ char *getPath(char *input)
     pathEnv = getenv("PATH"); /* declare une variable d'environnement PATH*/
 
     if (pathEnv == NULL) /* si la variable de déclaration est null*/
+    {
         return (NULL); /* retourne null*/
-
+    }
     pathEnvCopy = strdup(pathEnv); /* */
 
     token = strtok(pathEnvCopy, ":"); /* */
@@ -99,7 +101,7 @@ char *getPath(char *input)
     {
         sprintf(fullPath, "%s/%s", token, input); /* affiche 2 string*/
 
-        if (acces(fullPath, F_OK | X_OK) == 0) /**/
+        if (acces(fullPath, F_OK | X_OK) == 0)
         {
             result = strdup(fullPath); /* */
             free(pathEnvCopy); /* met fin a l'allocation de la variable d'environnement*/
@@ -127,19 +129,22 @@ int execute(char *input)
 
     args = tokenize(input); /* */
     if (args == NULL) /* si args est null*/
+    {
         free(args); /* met fin l'allocation args*/
         return (1); /* retourn faux*/
+    }
 
-
-    if (input[0] == '/' || input[0] == '.') /* si le premiere characteur du tableau input est
-	/ ou .*/
+    if (input[0] == '/' || input[0] == '.')
         path = strdup(input);
-    else /* sinon*/
+    else
         path = getPath(args[0]);
+    }
 
     if (path == NULL) /* si path est null*/
+    {
         free(args); /* met fin a l'allocation args*/
         return (-1); /* retourn faux*/
+    }
 
     pid = fork(); /* creer un enfant pid*/
 
