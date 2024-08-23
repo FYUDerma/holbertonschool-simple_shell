@@ -9,48 +9,48 @@
 
 int main(void)
 {
-	int exitStatus = 1, exitCode;
-	char *line = NULL, *input = NULL;
-	size_t bufsize = 0;
-	ssize_t string;
+	int exitStatus = 1, exitCode; /* declare 2 integere dont un avec la valeur 1*/
+	char *line = NULL, *input = NULL; /* declare 2 string avec la valeur null*/
+	size_t bufsize = 0; /* declare un entier positif de valeur 0*/
+	ssize_t string; /* declare un entier positif*/
 
-	while (1)
+	while (1) /* bouble infini*/
 	{
-		if (isatty(0))
+		if (isatty(0)) /* si isatty est null*/
 		{
-			printf("HBTN-Shell: ");
+			printf("HBTN-Shell: "); /* affiche hbtn-shell:*/
 		}
 
-		string = getline(&line, &bufsize, stdin);
+		string = getline(&line, &bufsize, stdin); /**/
 
-		if (string == -1)
+		if (string == -1)/* si string = -1*/
 		{
-			break;
+			break; /* met fin a la boucle*/
 		}
 
-		input = trim(line);
+		input = trim(line); /* declare que input = line de trim*/
 
-		if (strncmp(input, "exit", 4) == 0)
+		if (strncmp(input, "exit", 4) == 0) /* compare les 4 premier caractere de input avec la chaine exit*/
 		{
-			free(line);
+			free(line); /* met fin a l'allocation line*/
 
-			if (sscanf(input, "exit %d", &exitCode) == 1)
+			if (sscanf(input, "exit %d", &exitCode) == 1) /* affiche exit 1*/
 			{
-				exit(exitCode);
+				exit(exitCode); /* ferme la fonction faux*/
 			}
-			else
-				exit(0);
+			else /* sinon*/
+				exit(0); /* ferme la fonction vrai*/
 		}
 
-		exitStatus = execute(input);
+		exitStatus = execute(input); /* exitstatus a pour valeur l'execution de input*/
 
-		if (exitStatus == -1)
+		if (exitStatus == -1) /* si l'execution de input = -1*/
 		{
-			printf("%s: not found\n", input);
-			continue;
+			printf("%s: not found\n", input); /* affiche un string: not found*/
+			continue;/* continue la boucle*/
 		}
 	}
 
-	free(line);
-	return (0);
+	free(line); /* met fin a l'allocation line*/
+	return (0); /* retourne un entier*/
 }
