@@ -28,7 +28,7 @@ int main(void)
 			break; /* met fin a la boucle*/
 		}
 
-		input = trim(line); /* declare que input = line de trim*/
+		input = trim(line); /* effeca les espaces*/
 
 		if (strncmp(input, "exit", 4) == 0) /* compare les 4 premier caractere de input avec la chaine exit*/
 		{

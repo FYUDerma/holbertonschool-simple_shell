@@ -62,14 +62,14 @@ char **tokenize(char *input)
         fprintf(stderr, "$: allocation error\n"); /* affiche le prompt avec le message*/
         exit(EXIT_FAILURE); /* quitte le fichier*/
     }
-    token = strtok(input, " \t\r\n\a"); /* */
+    token = strtok(input, " \t\r\n\a"); /* prend le 1er token*/
 
     while (token != NULL) /* boucle avec condition tans que token n'est pas ou egal a null*/
     {
         tokens[i] = token; /* le string  de la ligne i a comme valeur token*/
         i++; /* incrementation de la variable */
 
-        token = strtok(NULL, " \t\r\n\a"); /* */
+        token = strtok(NULL, " \t\r\n\a"); /* prend le 2e tokens*/
     }
 
     tokens[i] = NULL; /* le i dans le tableau a comme valeur null*/
@@ -127,7 +127,7 @@ int execute(char *input)
     char **args, *path;/* declare un pointeur dans un pointeur et un string*/
     pid_t pid; /* declare un identifiant de processeur*/
 
-    args = tokenize(input); /* */
+    args = tokenize(input); /* creer un nouveau token*/
     if (args == NULL) /* si args est null*/
     {
         free(args); /* met fin l'allocation args*/
