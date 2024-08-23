@@ -159,4 +159,5 @@ int execute(char *input)
 		free(args);
 		free(path);
 	}
+	return (exitStatus);
 }
