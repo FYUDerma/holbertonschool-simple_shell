@@ -8,11 +8,12 @@
 
 int _isspace(int c)
 {
-	if (c == ' ' || c == '\t' || c == '\r' || c == '\w' || c == '\f')
+	if (c == ' ' || c == '\t' || c == '\r' || c == '\w' || c == '\f') /* si la variable c = charactere
+	d'espacement*/
 	{
-		return (1);
+		return (1); /* retourne vrai*/
 	}
-	return (0);
+	return (0); /* met fin a la fonction avec un entier*/
 }
 
 /**
@@ -22,24 +23,25 @@ int _isspace(int c)
  */
 char *trim(char *str)
 {
-	char *end = str + strlen(str) - 1;
+	char *end = str + strlen(str) - 1; /* declare un string end qui a comme valeur str + la longueur - 1 */
 
-	while (_isspace(*str))
+	while (_isspace(*str)) /* boucle avec condition tant qu'un charactere d'espacement n'est pas trouver dans str*/
 	{
-		str++;
+		str++; /* incrementation de str*/
 	}
 
-	if (*str == 0)
-		return (str);
+	if (*str == 0) /* si le pointeur str est vide*/
+		return (str); /* retourne*/
 
-	while (end > str && _isspace(*end))
+	while (end > str && _isspace(*end)) /* boucle tant que end est plus grand que str et qu'il y a une
+	fontion d'espacement dans le pointeur end*/
 	{
-		end--;
+		end--; /* décrementation end*/
 	}
 
-	end[1] = '\0';
+	end[1] = '\0'; /* declare que la 2e ligne du tableau end est EOF*/
 
-	return (str);
+	return (str); /* met fin a la fonction avec un string*/
 }
 
 /**
@@ -50,26 +52,27 @@ char *trim(char *str)
 
 char **tokenize(char *input)
 {
-    char **tokens = malloc(64 * sizeof(char *));
-    char *token;
-    int i = 0;
+    char **tokens = malloc(64 * sizeof(char *)); /* déclare un pointeur dans un pointeur qui a comme
+	valeur une allocation de 64 * la taille d'un string*/
+    char *token; /* déclare un un string */
+    int i = 0; /* declare une variable de type integere de nom i et valeur 0*/
 
-    if (!tokens)
-        fprintf(stderr, "$: allocation error\n");
-        exit(EXIT_FAILURE);
+    if (!tokens) /* si token n'est pas null*/
+        fprintf(stderr, "$: allocation error\n"); /* affiche le prompt avec le message*/
+        exit(EXIT_FAILURE); /* quitte le fichier*/
 
-    token = strtok(input, " \t\r\n\a");
+    token = strtok(input, " \t\r\n\a"); /* */
 
-    while (token != NULL)
+    while (token != NULL) /* boucle avec condition tans que token n'est pas ou eal a null*/
     {
-        tokens[i] = token;
-        i++;
+        tokens[i] = token; /* le string i a comme valeur token*/
+        i++; /* incrementation de la variable */
 
-        token = strtok(NULL, " \t\r\n\a");
+        token = strtok(NULL, " \t\r\n\a"); /* */
     }
 
-    tokens[i] = NULL;
-    return (tokens);
+    tokens[i] = NULL; /* le i dans le tableau a comme valeur null*/
+    return (tokens); /* met fin a la fonction avec un pointeur de poiteur de type char*/
 }
 
 /**
@@ -80,33 +83,34 @@ char **tokenize(char *input)
 
 char *getPath(char *input)
 {
-    char *result, *pathEnv, *pathEnvCopy, *token, fullPath[1024];
+    char *result, *pathEnv, *pathEnvCopy, *token, fullPath[1024]; /* declare plusieurs string, le tableau
+	fullparth a le maximum de octets*/
 
-    pathEnv = getenv("PATH");
+    pathEnv = getenv("PATH"); /* declare une variable d'environnement PATH*/
 
-    if (pathEnv == NULL)
-        return (NULL);
+    if (pathEnv == NULL) /* si la variable de déclaration est null*/
+        return (NULL); /* retourne null*/
 
-    pathEnvCopy = strdup(pathEnv);
+    pathEnvCopy = strdup(pathEnv); /* */
 
-    token = strtok(pathEnvCopy, ":");
+    token = strtok(pathEnvCopy, ":"); /* */
 
-    while (token)
+    while (token) /* boucle tant que token est null*/
     {
-        sprintf(fullPath, "%s/%s", token, input);
+        sprintf(fullPath, "%s/%s", token, input); /* affiche 2 string*/
 
-        if (acces(fullPath, F_OK | X_OK) == 0)
+        if (acces(fullPath, F_OK | X_OK) == 0) /**/
         {
-            result = strdup(fullPath);
-            free(pathEnvCopy);
-            return (result);
+            result = strdup(fullPath); /* */
+            free(pathEnvCopy); /* met fin a l'allocation de la variable d'environnement*/
+            return (result); /* retourne result*/
         }
 
-        token = strtok(NULL, ":");
+        token = strtok(NULL, ":"); /* */
     }
 
-    free(pathEnvCopy);
-    return (NULL);
+    free(pathEnvCopy); /* met fin a l'allocation*/
+    return (NULL); /* retourn null*/
 }
 
 /**
@@ -117,43 +121,44 @@ char *getPath(char *input)
 
 int execute(char *input)
 {
-    int status, exitStatus = 0;
-    char **args, *path;
-    pid_t pid;
+    int status, exitStatus = 0; /* declare 2 integere de valeur 0*/
+    char **args, *path;/* declare un pointeur dans un pointeur et un string*/
+    pid_t pid; /* declare un identifiant de processeur*/
 
-    args = tokenize(input);
-    if (args == NULL)
-        free(args);
-        return (1);
+    args = tokenize(input); /* */
+    if (args == NULL) /* si args est null*/
+        free(args); /* met fin l'allocation args*/
+        return (1); /* retourn faux*/
 
 
-    if (input[0] == '/' || input[0] == '.')
+    if (input[0] == '/' || input[0] == '.') /* si le premiere characteur du tableau input est
+	/ ou .*/
         path = strdup(input);
-    else
+    else /* sinon*/
         path = getPath(args[0]);
 
-    if (path == NULL)
-        free(args);
-        return (-1);
+    if (path == NULL) /* si path est null*/
+        free(args); /* met fin a l'allocation args*/
+        return (-1); /* retourn faux*/
 
-    pid = fork();
+    pid = fork(); /* creer un enfant pid*/
 
-    if (pid < 0)
+    if (pid < 0) /* si pid est plus petit que null*/
     {
-        free(args);
-        free(path);
-        return (-1);
+        free(args); /* met fin a l'allocation args*/
+        free(path); /* met fin a l'allocation path*/
+        return (-1); /* retourn faux*/
     }
-    else if (pid == 0)
+    else if (pid == 0) /* aussi non si pid est null*/
     {
-        exitStatus = execve(path, args, environ);
+        exitStatus = execve(path, args, environ); /* donne la valeur d'execution */
     }
-    else
+    else /* sinon*/
     {
-        exitStatus = wait(&status);
-        free(args);
-        free(path);
+        exitStatus = wait(&status); /* execute le programme	*/
+        free(args); /* met fin a l'allocation args*/
+        free(path); /* met fin a l'allocation path*/
     }
 
-    return (exitStatus);
+    return (exitStatus); /* retourn un entier*/
 }
