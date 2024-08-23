@@ -50,27 +50,27 @@ char *trim(char *str)
 
 char **tokenize(char *input)
 {
-    char **tokens = malloc(64 * sizeof(char *));
-    char *token;
-    int i = 0;
+	char **tokens = malloc(64 * sizeof(char *));
+	char *token;
+	int i = 0;
 
-    if (!tokens)
-    {
-        fprintf(stderr, "$: allocation error\n");
-        exit(EXIT_FAILURE);
-    }
-    token = strtok(input, " \t\r\n\a");
+	if (!tokens)
+	{
+		fprintf(stderr, "$: allocation error\n");
+		exit(EXIT_FAILURE);
+	}
+	token = strtok(input, " \t\r\n\a");
 
-    while (token != NULL)
-    {
-        tokens[i] = token;
-        i++;
+	while (token != NULL)
+	{
+		tokens[i] = token;
+		i++;
 
-        token = strtok(NULL, " \t\r\n\a");
-    }
+		token = strtok(NULL, " \t\r\n\a");
+	}
 
-    tokens[i] = NULL;
-    return (tokens);
+	tokens[i] = NULL;
+	return (tokens);
 }
 
 /**
@@ -81,34 +81,34 @@ char **tokenize(char *input)
 
 char *getPath(char *input)
 {
-    char *result, *pathEnv, *pathEnvCopy, *token, fullPath[1024];
+	char *result, *pathEnv, *pathEnvCopy, *token, fullPath[1024];
 
-    pathEnv = getenv("PATH");
+	pathEnv = getenv("PATH");
 
-    if (pathEnv == NULL)
-    {
-        return (NULL);
-    }
-    pathEnvCopy = strdup(pathEnv);
+	if (pathEnv == NULL)
+	{
+		return (NULL);
+	}
+	pathEnvCopy = strdup(pathEnv);
 
-    token = strtok(pathEnvCopy, ":");
+	token = strtok(pathEnvCopy, ":");
 
-    while (token)
-    {
-        sprintf(fullPath, "%s/%s", token, input);
+	while (token)
+	{
+		sprintf(fullPath, "%s/%s", token, input);
 
-        if (access(fullPath, F_OK | X_OK) == 0)
-        {
-            result = strdup(fullPath);
-            free(pathEnvCopy);
-            return (result);
-        }
+		if (access(fullPath, F_OK | X_OK) == 0)
+		{
+			result = strdup(fullPath);
+			free(pathEnvCopy);
+			return (result);
+		}
 
-        token = strtok(NULL, ":");
-    }
+		token = strtok(NULL, ":");
+	}
 
-    free(pathEnvCopy);
-    return (NULL);
+	free(pathEnvCopy);
+	return (NULL);
 }
 
 /**
@@ -119,50 +119,44 @@ char *getPath(char *input)
 
 int execute(char *input)
 {
-    int status, exitStatus = 0;
-    char **args, *path;
-    pid_t pid;
+	int status, exitStatus = 0;
+	char **args, *path;
+	pid_t pid;
 
-    args = tokenize(input);
-    if (args == NULL)
-    {
-        free(args);
-        return (1);
-    }
-
-    if (input[0] == '/' || input[0] == '.')
-    {
-        path = strdup(input);
-    }
-    else
-    {
-        path = getPath(args[0]);
-    }
-
-    if (path == NULL)
-    {
-        free(args);
-        return (-1);
-    }
-
-    pid = fork();
-
-    if (pid < 0)
-    {
-        free(args);
-        free(path);
-        return (-1);
-    }
-    else if (pid == 0)
-    {
-        exitStatus = execve(path, args, environ);
-    }
-    else
-    {
-        exitStatus = wait(&status);
-        free(args);
-        free(path);
-    }
-
-    return (exitStatus);
+	args = tokenize(input);
+	if (args == NULL)
+	{
+		free(args);
+		return (1);
+	}
+	if (input[0] == '/' || input[0] == '.')
+	{
+		path = strdup(input);
+	}
+	else
+	{
+		path = getPath(args[0]);
+	}
+	if (path == NULL)
+	{
+		free(args);
+		return (-1);
+	}
+	pid = fork();
+	if (pid < 0)
+	{
+		free(args);
+		free(path);
+		return (-1);
+	}
+	else if (pid == 0)
+	{
+		exitStatus = execve(path, args, environ);
+	}
+	else
+	{
+		exitStatus = wait(&status);
+		free(args);
+		free(path);
+	}
 }
