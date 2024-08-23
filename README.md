@@ -52,6 +52,17 @@ write |man 2 write|Writes to a file descriptor.
 gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
 ```
 
+## **Testing**
+```
+$ ./hsh
+HBTN-Shell: /bin/ls
+AUTHORS  README.md  func.c  hsh  main.c  main.h  man_1_simple_shell
+HBTN-Shell: ls
+AUTHORS  README.md  func.c  hsh  main.c  main.h  man_1_simple_shell
+HBTN-Shell: exit
+$
+```
+
 ## **PATH ENVIRONMENT VARIABLE**
 
 The PATH environment variable is an important security control. It specifies the directories to be searched to find a command. The default systemwide PATH value is specified in the /etc/profile file, and each user normally has a PATH value in the user's $HOME/.
