@@ -2,8 +2,6 @@
 
 /**
  * main - main function for shell
- * @argc: number of arguments
- * @argv: argument values
  * Return: Always 0
  */
 
@@ -29,7 +27,6 @@ int main(void)
 		}
 
 		input = trim(line);
-
 		if (strncmp(input, "exit", 4) == 0)
 		{
 			free(line);
@@ -41,16 +38,13 @@ int main(void)
 			else
 				exit(0);
 		}
-
 		exitStatus = execute(input);
-
 		if (exitStatus == -1)
 		{
 			printf("%s: not found\n", input);
 			continue;
 		}
 	}
-
 	free(line);
 	return (0);
 }
